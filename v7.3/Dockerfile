@@ -2,14 +2,14 @@ FROM lambci/lambda:build-nodejs8.10
 
 RUN mkdir /opt/php-lambda
 WORKDIR /opt/php-lambda
-RUN curl -sL https://www.openssl.org/source/openssl-1.0.1k.tar.gz | tar -xz && \
-    cd openssl-1.0.1k && \
-    ./config && \
+RUN curl -sL https://www.openssl.org/source/openssl-1.1.1c.tar.gz | tar -xz && \
+    cd openssl-1.1.1c && \
+    ./config --prefix=/opt/openssl --openssldir=/opt/openssl && \
     make && \
     make install && \
     cd /opt/php-lambda && \
-	curl -sL https://github.com/php/php-src/archive/php-7.3.6.tar.gz | tar -xz && \
-    cd php-src-php-7.3.6 && \
+	curl -sL https://github.com/php/php-src/archive/php-7.3.9.tar.gz | tar -xz && \
+    cd php-src-php-7.3.9 && \
     ./buildconf --force && \
     ./configure --prefix=/opt/php/ \
     	--without-pear \
@@ -23,7 +23,7 @@ RUN curl -sL https://www.openssl.org/source/openssl-1.0.1k.tar.gz | tar -xz && \
     	--enable-mbstring \
     	--with-mysqli \
     	--enable-mysqlnd \
-    	--with-openssl=/usr/local/ssl \
+    	--with-openssl=/opt/openssl \
     	--with-pdo-mysql \
     	--enable-shmop \
     	--enable-sockets \
