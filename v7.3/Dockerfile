@@ -1,15 +1,16 @@
-FROM lambci/lambda:build-nodejs8.10
+FROM lambci/lambda:build-nodejs10.x
 
 RUN mkdir /opt/php-lambda
 WORKDIR /opt/php-lambda
-RUN curl -sL https://www.openssl.org/source/openssl-1.1.1c.tar.gz | tar -xz && \
-    cd openssl-1.1.1c && \
+RUN yum install -y libxml2-devel bzip2-devel curl-devel libxslt-devel && \
+    curl -sL https://www.openssl.org/source/openssl-1.1.1d.tar.gz | tar -xz && \
+    cd openssl-1.1.1d && \
     ./config --prefix=/opt/openssl --openssldir=/opt/openssl && \
     make && \
     make install && \
     cd /opt/php-lambda && \
-	curl -sL https://github.com/php/php-src/archive/php-7.3.9.tar.gz | tar -xz && \
-    cd php-src-php-7.3.9 && \
+	curl -sL https://github.com/php/php-src/archive/php-7.3.11.tar.gz | tar -xz && \
+    cd php-src-php-7.3.11 && \
     ./buildconf --force && \
     ./configure --prefix=/opt/php/ \
     	--without-pear \
@@ -27,6 +28,7 @@ RUN curl -sL https://www.openssl.org/source/openssl-1.1.1c.tar.gz | tar -xz && \
     	--with-pdo-mysql \
     	--enable-shmop \
     	--enable-sockets \
+    	--enable-static \
     	--enable-sysvmsg \
     	--enable-sysvsem \
     	--enable-sysvshm \
