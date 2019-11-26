@@ -1,14 +1,8 @@
-FROM lambci/lambda:build-nodejs10.x
+FROM lambci/lambda:build-provided
 
 RUN mkdir /opt/php-lambda
 WORKDIR /opt/php-lambda
-RUN yum install -y libxml2-devel bzip2-devel curl-devel libxslt-devel && \
-    curl -sL https://www.openssl.org/source/openssl-1.1.1d.tar.gz | tar -xz && \
-    cd openssl-1.1.1d && \
-    ./config --prefix=/opt/openssl --openssldir=/opt/openssl && \
-    make && \
-    make install && \
-    cd /opt/php-lambda && \
+RUN cd /opt/php-lambda && \
 	curl -sL https://github.com/php/php-src/archive/php-7.3.11.tar.gz | tar -xz && \
     cd php-src-php-7.3.11 && \
     ./buildconf --force && \
@@ -24,11 +18,10 @@ RUN yum install -y libxml2-devel bzip2-devel curl-devel libxslt-devel && \
     	--enable-mbstring \
     	--with-mysqli \
     	--enable-mysqlnd \
-    	--with-openssl=/opt/openssl \
+    	--with-openssl \
     	--with-pdo-mysql \
     	--enable-shmop \
     	--enable-sockets \
-    	--enable-static \
     	--enable-sysvmsg \
     	--enable-sysvsem \
     	--enable-sysvshm \
