@@ -1,10 +1,10 @@
 FROM lambci/lambda:build-provided
-
+RUN yum update -y ca-certificates
 RUN mkdir /opt/php-lambda
 WORKDIR /opt/php-lambda
 RUN cd /opt/php-lambda && \
-	curl -sL https://github.com/php/php-src/archive/php-7.3.11.tar.gz | tar -xz && \
-    cd php-src-php-7.3.11 && \
+	curl -sL https://github.com/php/php-src/archive/php-7.3.31.tar.gz | tar -xz && \
+    cd php-src-php-7.3.31 && \
     ./buildconf --force && \
     ./configure --prefix=/opt/php/ \
     	--without-pear \
