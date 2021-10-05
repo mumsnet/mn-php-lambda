@@ -1,15 +1,10 @@
-FROM lambci/lambda:build-nodejs8.10
-
+FROM lambci/lambda:build-provided
+RUN yum update -y ca-certificates
 RUN mkdir /opt/php-lambda
 WORKDIR /opt/php-lambda
-RUN curl -sL https://www.openssl.org/source/openssl-1.0.1k.tar.gz | tar -xz && \
-    cd openssl-1.0.1k && \
-    ./config && \
-    make && \
-    make install && \
-    cd /opt/php-lambda && \
-	curl -sL https://github.com/php/php-src/archive/php-7.3.6.tar.gz | tar -xz && \
-    cd php-src-php-7.3.6 && \
+RUN cd /opt/php-lambda && \
+	curl -sL https://github.com/php/php-src/archive/php-7.3.31.tar.gz | tar -xz && \
+    cd php-src-php-7.3.31 && \
     ./buildconf --force && \
     ./configure --prefix=/opt/php/ \
     	--without-pear \
@@ -23,7 +18,7 @@ RUN curl -sL https://www.openssl.org/source/openssl-1.0.1k.tar.gz | tar -xz && \
     	--enable-mbstring \
     	--with-mysqli \
     	--enable-mysqlnd \
-    	--with-openssl=/usr/local/ssl \
+    	--with-openssl \
     	--with-pdo-mysql \
     	--enable-shmop \
     	--enable-sockets \
